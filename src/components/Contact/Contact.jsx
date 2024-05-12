@@ -1,25 +1,48 @@
 import { useDispatch } from "react-redux";
-import { deleteContact } from "../../redux/contactsOps";
 
-import styles from "./Contact.module.css";
+import { setCurrentContact } from "../../redux/contacts/slice";
 
-const Contact = ({ id, name, number }) => {
+import css from "./Contact.module.css";
+
+const Contact = ({ id, name, number, openModalDelete, openModalEdit }) => {
   const dispatch = useDispatch();
 
-  const handleCLickDeleteBtn = () => {
-    const contactId = id;
-    dispatch(deleteContact(contactId));
+  const currentContact = {
+    id,
+    name,
+    number,
+  };
+
+  const handleBtnDelete = () => {
+    dispatch(setCurrentContact(currentContact));
+
+    openModalDelete();
+  };
+
+  const handleBtnEdit = () => {
+    dispatch(setCurrentContact(currentContact));
+
+    openModalEdit();
   };
 
   return (
-    <div className={styles.item}>
+    <div className={css.item}>
       <div>
         <p>{name}</p>
         <p>{number}</p>
       </div>
-      <button type="button" onClick={handleCLickDeleteBtn}>
-        Delete
-      </button>
+      <ul className={css.list_btn}>
+        <li>
+          <button className={css.btn} type="button" onClick={handleBtnEdit}>
+            Edit
+          </button>
+        </li>
+        <li>
+          <button className={css.btn} type="button" onClick={handleBtnDelete}>
+            Delete
+          </button>
+        </li>
+      </ul>
     </div>
   );
 };

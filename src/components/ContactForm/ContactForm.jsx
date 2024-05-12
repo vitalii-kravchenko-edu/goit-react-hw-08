@@ -1,24 +1,25 @@
 import { useDispatch } from "react-redux";
 
 import { ErrorMessage, Field, Form, Formik } from "formik";
-import { nanoid } from "nanoid";
 import * as Yup from "yup";
+import toast from "react-hot-toast";
 
-import { addContact } from "../../redux/contactsOps";
+import { addContact } from "../../redux/contacts/operations";
 
-import styles from "./ContactForm.module.css";
+import css from "./ContactForm.module.css";
 
-const FORM_INITIAL_VALUES = {
-  name: "",
-  number: "",
-};
-
-const ContactForm = () => {
+const ContactForm = ({ onSubmit }) => {
+  const initialContactValues = {
+    name: "",
+    number: "",
+  };
   const dispatch = useDispatch();
 
   const handleSubmit = (values, actions) => {
-    const newContact = { ...values, id: nanoid() };
+    const newContact = values;
     dispatch(addContact(newContact));
+    onSubmit();
+    toast.success("New contact added");
 
     actions.resetForm();
   };
@@ -36,27 +37,39 @@ const ContactForm = () => {
   });
 
   return (
-    <Formik
-      initialValues={FORM_INITIAL_VALUES}
-      validationSchema={contactFormSchema}
-      onSubmit={handleSubmit}
-    >
-      <Form className={styles.form}>
-        <label>
-          <span>Name</span>
-          <br />
-          <Field type="text" name="name" placeholder="Name and Lastname" />
-          <ErrorMessage component="p" name="name" />
-        </label>
-        <label>
-          <span>Number</span>
-          <br />
-          <Field type="tel" name="number" placeholder="xxx-xxx-xxxx" />
-          <ErrorMessage component="p" name="number" />
-        </label>
-        <button type="submit">Add contact</button>
-      </Form>
-    </Formik>
+    <div>
+      <Formik
+        initialValues={initialContactValues}
+        validationSchema={contactFormSchema}
+        onSubmit={handleSubmit}
+      >
+        <Form className={css.form}>
+          <div className={css.closeBtn}>
+            <button
+              type="button"
+              onClick={() => {
+                onSubmit();
+              }}
+            >
+              ⨉
+            </button>
+          </div>
+          <label>
+            <span>Name</span>
+            <br />
+            <Field type="text" name="name" placeholder="Name and Lastname" />
+            <ErrorMessage component="p" name="name" />
+          </label>
+          <label>
+            <span>Number</span>
+            <br />
+            <Field type="tel" name="number" placeholder="xxx-xxx-xxxx" />
+            <ErrorMessage component="p" name="number" />
+          </label>
+          <button type="submit">Add contact</button>
+        </Form>
+      </Formik>
+    </div>
   );
 };
 

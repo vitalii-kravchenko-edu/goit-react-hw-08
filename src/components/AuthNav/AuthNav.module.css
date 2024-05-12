@@ -1,0 +1,23 @@
+.authList {
+  list-style: none;
+  display: flex;
+  gap: 30px;
+}
+
+.authLink {
+  text-decoration: none;
+  display: block;
+  padding: 8px 16px;
+  background-color: white;
+  color: rgb(16, 116, 82);
+  border-radius: 4px;
+  border: 1px solid;
+  border-color: rgb(16, 116, 82);
+  transition: all 250ms ease-in-out;
+}
+
+.authLink:hover,
+.authLink:focus {
+  background-color: rgb(16, 116, 82);
+  color: white;
+}
